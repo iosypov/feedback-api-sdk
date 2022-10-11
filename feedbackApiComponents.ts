@@ -3,6 +3,8 @@
  *
  * @version 1.0
  */
+import * as reactQuery from '@tanstack/react-query';
+import { useFeedbackApiContext, FeedbackApiContext } from './feedbackApiContext';
 import type * as Fetcher from './feedbackApiFetcher';
 import { feedbackApiFetch } from './feedbackApiFetcher';
 import type * as Schemas from './feedbackApiSchemas';
@@ -43,15 +45,33 @@ export type GetFeedbackError = Fetcher.ErrorWrapper<
 
 export type GetFeedbackVariables = {
   pathParams: GetFeedbackPathParams;
-};
+} & FeedbackApiContext['fetcherOptions'];
 
-export const getFeedback = (variables: GetFeedbackVariables, signal?: AbortSignal) =>
+export const fetchGetFeedback = (variables: GetFeedbackVariables, signal?: AbortSignal) =>
   feedbackApiFetch<Schemas.Feedback, GetFeedbackError, undefined, {}, {}, GetFeedbackPathParams>({
     url: '/feedback/{id}',
     method: 'get',
     ...variables,
     signal,
   });
+
+export const useGetFeedback = <TData = Schemas.Feedback>(
+  variables: GetFeedbackVariables,
+  options?: Omit<
+    reactQuery.UseQueryOptions<Schemas.Feedback, GetFeedbackError, TData>,
+    'queryKey' | 'queryFn'
+  >
+) => {
+  const { fetcherOptions, queryOptions, queryKeyFn } = useFeedbackApiContext(options);
+  return reactQuery.useQuery<Schemas.Feedback, GetFeedbackError, TData>(
+    queryKeyFn({ path: '/feedback/{id}', operationId: 'getFeedback', variables }),
+    ({ signal }) => fetchGetFeedback({ ...fetcherOptions, ...variables }, signal),
+    {
+      ...options,
+      ...queryOptions,
+    }
+  );
+};
 
 export type UpdateFeedbackPathParams = {
   /**
@@ -89,9 +109,9 @@ export type UpdateFeedbackError = Fetcher.ErrorWrapper<
 export type UpdateFeedbackVariables = {
   body?: Schemas.Feedback;
   pathParams: UpdateFeedbackPathParams;
-};
+} & FeedbackApiContext['fetcherOptions'];
 
-export const updateFeedback = (variables: UpdateFeedbackVariables, signal?: AbortSignal) =>
+export const fetchUpdateFeedback = (variables: UpdateFeedbackVariables, signal?: AbortSignal) =>
   feedbackApiFetch<
     Schemas.Feedback,
     UpdateFeedbackError,
@@ -100,6 +120,20 @@ export const updateFeedback = (variables: UpdateFeedbackVariables, signal?: Abor
     {},
     UpdateFeedbackPathParams
   >({ url: '/feedback/{id}', method: 'put', ...variables, signal });
+
+export const useUpdateFeedback = (
+  options?: Omit<
+    reactQuery.UseMutationOptions<Schemas.Feedback, UpdateFeedbackError, UpdateFeedbackVariables>,
+    'mutationFn'
+  >
+) => {
+  const { fetcherOptions } = useFeedbackApiContext();
+  return reactQuery.useMutation<Schemas.Feedback, UpdateFeedbackError, UpdateFeedbackVariables>(
+    (variables: UpdateFeedbackVariables) =>
+      fetchUpdateFeedback({ ...fetcherOptions, ...variables }),
+    options
+  );
+};
 
 export type GetFeedbacksQueryParams = {
   /**
@@ -188,9 +222,9 @@ export type GetFeedbacksResponse = {
 export type GetFeedbacksVariables = {
   headers?: GetFeedbacksHeaders;
   queryParams?: GetFeedbacksQueryParams;
-};
+} & FeedbackApiContext['fetcherOptions'];
 
-export const getFeedbacks = (variables: GetFeedbacksVariables, signal?: AbortSignal) =>
+export const fetchGetFeedbacks = (variables: GetFeedbacksVariables, signal?: AbortSignal) =>
   feedbackApiFetch<
     GetFeedbacksResponse,
     GetFeedbacksError,
@@ -199,6 +233,24 @@ export const getFeedbacks = (variables: GetFeedbacksVariables, signal?: AbortSig
     GetFeedbacksQueryParams,
     {}
   >({ url: '/feedback', method: 'get', ...variables, signal });
+
+export const useGetFeedbacks = <TData = GetFeedbacksResponse>(
+  variables: GetFeedbacksVariables,
+  options?: Omit<
+    reactQuery.UseQueryOptions<GetFeedbacksResponse, GetFeedbacksError, TData>,
+    'queryKey' | 'queryFn'
+  >
+) => {
+  const { fetcherOptions, queryOptions, queryKeyFn } = useFeedbackApiContext(options);
+  return reactQuery.useQuery<GetFeedbacksResponse, GetFeedbacksError, TData>(
+    queryKeyFn({ path: '/feedback', operationId: 'getFeedbacks', variables }),
+    ({ signal }) => fetchGetFeedbacks({ ...fetcherOptions, ...variables }, signal),
+    {
+      ...options,
+      ...queryOptions,
+    }
+  );
+};
 
 export type CreateFeedbackError = Fetcher.ErrorWrapper<
   | {
@@ -221,15 +273,29 @@ export type CreateFeedbackError = Fetcher.ErrorWrapper<
 
 export type CreateFeedbackVariables = {
   body?: Schemas.Feedback;
-};
+} & FeedbackApiContext['fetcherOptions'];
 
-export const createFeedback = (variables: CreateFeedbackVariables, signal?: AbortSignal) =>
+export const fetchCreateFeedback = (variables: CreateFeedbackVariables, signal?: AbortSignal) =>
   feedbackApiFetch<Schemas.Feedback, CreateFeedbackError, Schemas.Feedback, {}, {}, {}>({
     url: '/feedback',
     method: 'post',
     ...variables,
     signal,
   });
+
+export const useCreateFeedback = (
+  options?: Omit<
+    reactQuery.UseMutationOptions<Schemas.Feedback, CreateFeedbackError, CreateFeedbackVariables>,
+    'mutationFn'
+  >
+) => {
+  const { fetcherOptions } = useFeedbackApiContext();
+  return reactQuery.useMutation<Schemas.Feedback, CreateFeedbackError, CreateFeedbackVariables>(
+    (variables: CreateFeedbackVariables) =>
+      fetchCreateFeedback({ ...fetcherOptions, ...variables }),
+    options
+  );
+};
 
 export type HealthError = Fetcher.ErrorWrapper<
   | {
@@ -242,14 +308,47 @@ export type HealthError = Fetcher.ErrorWrapper<
     }
 >;
 
-export const health = (signal?: AbortSignal) =>
+export type HealthVariables = FeedbackApiContext['fetcherOptions'];
+
+export const fetchHealth = (variables: HealthVariables, signal?: AbortSignal) =>
   feedbackApiFetch<Responses.NoContent, HealthError, undefined, {}, {}, {}>({
     url: '/health',
     method: 'get',
+    ...variables,
     signal,
   });
 
-export const operationsByTag = {
-  private: { getFeedback, getFeedbacks, health },
-  public: { updateFeedback, createFeedback },
+export const useHealth = <TData = Responses.NoContent>(
+  variables: HealthVariables,
+  options?: Omit<
+    reactQuery.UseQueryOptions<Responses.NoContent, HealthError, TData>,
+    'queryKey' | 'queryFn'
+  >
+) => {
+  const { fetcherOptions, queryOptions, queryKeyFn } = useFeedbackApiContext(options);
+  return reactQuery.useQuery<Responses.NoContent, HealthError, TData>(
+    queryKeyFn({ path: '/health', operationId: 'health', variables }),
+    ({ signal }) => fetchHealth({ ...fetcherOptions, ...variables }, signal),
+    {
+      ...options,
+      ...queryOptions,
+    }
+  );
 };
+
+export type QueryOperation =
+  | {
+      path: '/feedback/{id}';
+      operationId: 'getFeedback';
+      variables: GetFeedbackVariables;
+    }
+  | {
+      path: '/feedback';
+      operationId: 'getFeedbacks';
+      variables: GetFeedbacksVariables;
+    }
+  | {
+      path: '/health';
+      operationId: 'health';
+      variables: HealthVariables;
+    };
