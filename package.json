@@ -1,4 +1,5 @@
 {
+  "name": "blips-and-chitz-feedback-api",
   "version": "1.0.0",
   "license": "MIT",
   "sideEffects": false,
@@ -25,9 +26,8 @@
     "singleQuote": true,
     "trailingComma": "es5"
   },
-  "name": "feedback-apilib",
   "description": "This is a simple API for creating feedback.",
-  "author": "APIMATIC SDK Generator",
+  "author": "Blips and Chitz",
   "devDependencies": {
     "stream-equal": "^2.0.1",
     "tsdx": "^0.14.1",
@@ -37,8 +37,5 @@
   "dependencies": {
     "@apimatic/core": "^0.7.9",
     "@apimatic/schema": "^0.6.0"
-  },
-  "bugs": {
-    "email": "support@apimatic.io"
   }
 }
