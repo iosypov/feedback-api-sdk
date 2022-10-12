@@ -8,7 +8,7 @@ This is a simple API for creating feedback.
 ## Installation
 
 ```bash
-npm install blips-and-chitz-feedback-api
+npm install blips-and-chitz-feedback-api-sdk
 ```
 
 ## Initialize the API Client
