@@ -16,8 +16,9 @@ export {
   ResponseValidationError,
 } from './core';
 export * from './defaultConfiguration';
-export * from './controllers/privateController';
-export * from './controllers/publicController';
+export * from './controllers/feedbackController';
+export * from './controllers/tenantController';
+export * from './controllers/toolsController';
 export { ApiError } from './core';
 export * from './errors/badRequestError';
 export * from './errors/internalServerError';
@@ -30,5 +31,6 @@ export { FeedbackData } from './models/feedbackData';
 export { FeedbackMetaData } from './models/feedbackMetaData';
 export { FeedbackResponse } from './models/feedbackResponse';
 export { Pagination } from './models/pagination';
+export { Tenant } from './models/tenant';
 export { XORDERBYEnum } from './models/xORDERBYEnum';
 export { XORDEREnum } from './models/xORDEREnum';

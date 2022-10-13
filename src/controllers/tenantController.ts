@@ -10,57 +10,61 @@ import { InternalServerError } from '../errors/internalServerError';
 import { NotFoundError } from '../errors/notFoundError';
 import { TooManyRequestsError } from '../errors/tooManyRequestsError';
 import { UnauthorizedError } from '../errors/unauthorizedError';
-import { Feedback, feedbackSchema } from '../models/feedback';
+import { Tenant, tenantSchema } from '../models/tenant';
 import { string } from '../schema';
 import { BaseController } from './baseController';
 
-export class PublicController extends BaseController {
+export class TenantController extends BaseController {
   /**
-   * Update feedback.
+   * Create new tenant.
    *
-   * @param id           Resource identifier string.
    * @param body
    * @return Response from the API call
    */
-  async updateFeedback(
-    id: string,
-    body: Feedback,
+  async createTenant(
+    body: Tenant,
     requestOptions?: RequestOptions
-  ): Promise<ApiResponse<Feedback>> {
+  ): Promise<ApiResponse<Tenant>> {
+    const req = this.createRequest('POST', '/tenant');
+    const mapped = req.prepareArgs({ body: [body, tenantSchema] });
+    req.header('Content-Type', 'application/json');
+    req.json(mapped.body);
+    req.throwOn(400, BadRequestError, 'Bad Request');
+    req.throwOn(401, UnauthorizedError, 'Unauthorized');
+    req.throwOn(429, TooManyRequestsError, 'Too Many Requests');
+    req.throwOn(500, InternalServerError, 'Internal Server Error');
+    return req.callAsJson(tenantSchema, requestOptions);
+  }
+
+  /**
+   * Update tenant.
+   *
+   * @param id           Resource identifier string.
+   * @param xAPIKEY      Private api key.
+   * @param body
+   * @return Response from the API call
+   */
+  async updateTenantById(
+    id: string,
+    xAPIKEY: string,
+    body: Tenant,
+    requestOptions?: RequestOptions
+  ): Promise<ApiResponse<Tenant>> {
     const req = this.createRequest('PUT');
     const mapped = req.prepareArgs({
       id: [id, string()],
-      body: [body, feedbackSchema],
+      xAPIKEY: [xAPIKEY, string()],
+      body: [body, tenantSchema],
     });
+    req.header('X-API-KEY', mapped.xAPIKEY);
     req.header('Content-Type', 'application/json');
     req.json(mapped.body);
-    req.appendTemplatePath`/feedback/${mapped.id}`;
+    req.appendTemplatePath`/tenant/${mapped.id}`;
     req.throwOn(400, BadRequestError, 'Bad Request');
     req.throwOn(401, UnauthorizedError, 'Unauthorized');
     req.throwOn(404, NotFoundError, 'Not found');
     req.throwOn(429, TooManyRequestsError, 'Too Many Requests');
     req.throwOn(500, InternalServerError, 'Internal Server Error');
-    return req.callAsJson(feedbackSchema, requestOptions);
-  }
-
-  /**
-   * Create new feedback.
-   *
-   * @param body
-   * @return Response from the API call
-   */
-  async createFeedback(
-    body: Feedback,
-    requestOptions?: RequestOptions
-  ): Promise<ApiResponse<Feedback>> {
-    const req = this.createRequest('POST', '/feedback');
-    const mapped = req.prepareArgs({ body: [body, feedbackSchema] });
-    req.header('Content-Type', 'application/json');
-    req.json(mapped.body);
-    req.throwOn(400, BadRequestError, 'Bad Request');
-    req.throwOn(401, UnauthorizedError, 'Unauthorized');
-    req.throwOn(429, TooManyRequestsError, 'Too Many Requests');
-    req.throwOn(500, InternalServerError, 'Internal Server Error');
-    return req.callAsJson(feedbackSchema, requestOptions);
+    return req.callAsJson(tenantSchema, requestOptions);
   }
 }

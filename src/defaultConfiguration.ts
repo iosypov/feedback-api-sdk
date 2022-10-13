@@ -11,7 +11,8 @@ import { RetryConfiguration } from './core';
 export const DEFAULT_CONFIGURATION: Configuration = {
   timeout: 0,
   environment: Environment.Production,
-  xAPIKEY: 'TODO X-API-KEY',
+  xApiKey: 'TODO x-api-key',
+  xRapidAPIKey: 'TODO X-RapidAPI-Key',
 };
 
 /** Default values for retry configuration parameters. */

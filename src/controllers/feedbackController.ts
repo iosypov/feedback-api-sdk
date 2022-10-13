@@ -20,19 +20,25 @@ import { XORDEREnum, xORDEREnumSchema } from '../models/xORDEREnum';
 import { array, boolean, number, optional, string } from '../schema';
 import { BaseController } from './baseController';
 
-export class PrivateController extends BaseController {
+export class FeedbackController extends BaseController {
   /**
-   * Get feedback.
+   * Get feedback by id.
    *
-   * @param id Resource identifier string.
+   * @param id        Resource identifier string.
+   * @param xAPIKEY   Private api key.
    * @return Response from the API call
    */
-  async getFeedback(
+  async getFeedbackById(
     id: string,
+    xAPIKEY: string,
     requestOptions?: RequestOptions
   ): Promise<ApiResponse<Feedback>> {
     const req = this.createRequest('GET');
-    const mapped = req.prepareArgs({ id: [id, string()] });
+    const mapped = req.prepareArgs({
+      id: [id, string()],
+      xAPIKEY: [xAPIKEY, string()],
+    });
+    req.header('X-API-KEY', mapped.xAPIKEY);
     req.appendTemplatePath`/feedback/${mapped.id}`;
     req.throwOn(400, BadRequestError, 'Bad Request');
     req.throwOn(401, UnauthorizedError, 'Unauthorized');
@@ -43,8 +49,41 @@ export class PrivateController extends BaseController {
   }
 
   /**
-   * Get feedbacks.
+   * Update feedback by id.
    *
+   * @param id           Resource identifier string.
+   * @param xAPIKEY      Private api key.
+   * @param body
+   * @return Response from the API call
+   */
+  async updateFeedbackById(
+    id: string,
+    xAPIKEY: string,
+    body: Feedback,
+    requestOptions?: RequestOptions
+  ): Promise<ApiResponse<Feedback>> {
+    const req = this.createRequest('PUT');
+    const mapped = req.prepareArgs({
+      id: [id, string()],
+      xAPIKEY: [xAPIKEY, string()],
+      body: [body, feedbackSchema],
+    });
+    req.header('X-API-KEY', mapped.xAPIKEY);
+    req.header('Content-Type', 'application/json');
+    req.json(mapped.body);
+    req.appendTemplatePath`/feedback/${mapped.id}`;
+    req.throwOn(400, BadRequestError, 'Bad Request');
+    req.throwOn(401, UnauthorizedError, 'Unauthorized');
+    req.throwOn(404, NotFoundError, 'Not found');
+    req.throwOn(429, TooManyRequestsError, 'Too Many Requests');
+    req.throwOn(500, InternalServerError, 'Internal Server Error');
+    return req.callAsJson(feedbackSchema, requestOptions);
+  }
+
+  /**
+   * Get feedback.
+   *
+   * @param xAPIKEY        Private api key.
    * @param rating         Rating to filter by.
    * @param sentiment      Sentiment to filter by.
    * @param reasons        Reasons to filter by.
@@ -59,7 +98,8 @@ export class PrivateController extends BaseController {
    * @param xORDERBY       Order by.
    * @return Response from the API call
    */
-  async getFeedbacks(
+  async getFeedback(
+    xAPIKEY: string,
     rating?: number[],
     sentiment?: boolean[],
     reasons?: string[],
@@ -76,6 +116,7 @@ export class PrivateController extends BaseController {
   ): Promise<ApiResponse<FeedbackResponse>> {
     const req = this.createRequest('GET', '/feedback');
     const mapped = req.prepareArgs({
+      xAPIKEY: [xAPIKEY, string()],
       rating: [rating, optional(array(number()))],
       sentiment: [sentiment, optional(array(boolean()))],
       reasons: [reasons, optional(array(string()))],
@@ -89,6 +130,7 @@ export class PrivateController extends BaseController {
       xORDER: [xORDER, optional(xORDEREnumSchema)],
       xORDERBY: [xORDERBY, optional(xORDERBYEnumSchema)],
     });
+    req.header('X-API-KEY', mapped.xAPIKEY);
     req.header('X-PAGE', mapped.xPAGE);
     req.header('X-PER-PAGE', mapped.xPERPAGE);
     req.header('XORDER', mapped.xORDER);
@@ -108,16 +150,23 @@ export class PrivateController extends BaseController {
   }
 
   /**
-   * Check health.
+   * Create new feedback.
    *
+   * @param body
    * @return Response from the API call
    */
-  async health(
+  async createFeedback(
+    body: Feedback,
     requestOptions?: RequestOptions
-  ): Promise<ApiResponse<void>> {
-    const req = this.createRequest('GET', '/health');
+  ): Promise<ApiResponse<Feedback>> {
+    const req = this.createRequest('POST', '/feedback');
+    const mapped = req.prepareArgs({ body: [body, feedbackSchema] });
+    req.header('Content-Type', 'application/json');
+    req.json(mapped.body);
+    req.throwOn(400, BadRequestError, 'Bad Request');
+    req.throwOn(401, UnauthorizedError, 'Unauthorized');
     req.throwOn(429, TooManyRequestsError, 'Too Many Requests');
     req.throwOn(500, InternalServerError, 'Internal Server Error');
-    return req.call(requestOptions);
+    return req.callAsJson(feedbackSchema, requestOptions);
   }
 }

@@ -22,7 +22,8 @@ The following parameters are configurable for the API Client:
 | `timeout` | `number` | Timeout for API calls.<br>*Default*: `0` |
 | `httpClientOptions` | `Partial<HttpClientOptions>` | Stable configurable http client options. |
 | `unstableHttpClientOptions` | `any` | Unstable configurable http client options. |
-| `xAPIKEY` | `string` |  |
+| `xApiKey` | `string` |  |
+| `xRapidAPIKey` | `string` |  |
 
 ### HttpClientOptions
 
@@ -50,21 +51,22 @@ The API client can be initialized as follows:
 ```ts
 const client = new Client({
   timeout: 0,
-  xAPIKEY: null,
+  xApiKey: 'x-api-key',
+  xRapidAPIKey: 'X-RapidAPI-Key',
 })
 ```
 
 ## Authorization
 
-This API uses `Custom Header Signature`.
+This API uses `Custom Authentication`.
 
 ## List of APIs
 
-* [Private](doc/controllers/private.md)
-* [Public](doc/controllers/public.md)
+* [Tenant](doc/controllers/tenant.md)
+* [Feedback](doc/controllers/feedback.md)
+* [Tools](doc/controllers/tools.md)
 
 ## Classes Documentation
 
 * [ApiResponse](doc/api-response.md)
 * [ApiError](doc/api-error.md)
-
