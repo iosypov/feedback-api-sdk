@@ -22,8 +22,9 @@ The following parameters are configurable for the API Client:
 | `timeout` | `number` | Timeout for API calls.<br>*Default*: `0` |
 | `httpClientOptions` | `Partial<HttpClientOptions>` | Stable configurable http client options. |
 | `unstableHttpClientOptions` | `any` | Unstable configurable http client options. |
-| `xApiKey` | `string` |  |
-| `xRapidAPIKey` | `string` |  |
+| `xRapidAPIKey` | `string` | Your Rapid API Key |
+| `xAPIKEY` | `string` | Private Feedback Api Key |
+| `xRapidAPIHost` | `string` | *Default*: `'feedback-api5.p.rapidapi.com'` |
 
 ### HttpClientOptions
 
@@ -51,22 +52,23 @@ The API client can be initialized as follows:
 ```ts
 const client = new Client({
   timeout: 0,
-  xApiKey: 'x-api-key',
   xRapidAPIKey: 'X-RapidAPI-Key',
+  xAPIKEY: 'X-API-KEY',
+  xRapidAPIHost: 'feedback-api5.p.rapidapi.com',
 })
 ```
 
 ## Authorization
 
-This API uses `Custom Authentication`.
+This API uses `Custom Header Signature`.
 
 ## List of APIs
 
-* [Tenant](doc/controllers/tenant.md)
+* [Credentials](doc/controllers/credentials.md)
 * [Feedback](doc/controllers/feedback.md)
-* [Tools](doc/controllers/tools.md)
 
 ## Classes Documentation
 
 * [ApiResponse](doc/api-response.md)
 * [ApiError](doc/api-error.md)
+

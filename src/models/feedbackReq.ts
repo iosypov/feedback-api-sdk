@@ -14,7 +14,7 @@ import {
   string,
 } from '../schema';
 
-export interface Feedback {
+export interface FeedbackReq {
   /** Rating of the feedback. */
   rating?: number;
   /** Sentiment of the feedback. */
@@ -33,19 +33,9 @@ export interface Feedback {
   tags?: string[];
   /** Unique identifier of the user. */
   userId?: string;
-  /** Unique identifier of the feedback. */
-  id: string;
-  /** Date of the feedback creation. */
-  createdAt: string;
-  /** Date of the feedback update. */
-  updatedAt?: string;
-  /** IP address of the user. */
-  userIP: string;
-  /** User agent of the device. */
-  userAgent: string;
 }
 
-export const feedbackSchema: Schema<Feedback> = object({
+export const feedbackReqSchema: Schema<FeedbackReq> = object({
   rating: ['rating', optional(number())],
   sentiment: ['sentiment', optional(boolean())],
   reasons: ['reasons', optional(array(string()))],
@@ -55,9 +45,4 @@ export const feedbackSchema: Schema<Feedback> = object({
   apiOperationId: ['apiOperationId', optional(string())],
   tags: ['tags', optional(array(string()))],
   userId: ['userId', optional(string())],
-  id: ['id', string()],
-  createdAt: ['createdAt', string()],
-  updatedAt: ['updatedAt', optional(string())],
-  userIP: ['userIP', string()],
-  userAgent: ['userAgent', string()],
 });

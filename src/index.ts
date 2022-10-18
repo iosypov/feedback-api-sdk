@@ -16,21 +16,22 @@ export {
   ResponseValidationError,
 } from './core';
 export * from './defaultConfiguration';
+export * from './controllers/credentialsController';
 export * from './controllers/feedbackController';
-export * from './controllers/tenantController';
-export * from './controllers/toolsController';
 export { ApiError } from './core';
 export * from './errors/badRequestError';
 export * from './errors/internalServerError';
 export * from './errors/notFoundError';
 export * from './errors/tooManyRequestsError';
 export * from './errors/unauthorizedError';
+export { Credentials } from './models/credentials';
 export { Data } from './models/data';
 export { Feedback } from './models/feedback';
+export { FeedbackContext } from './models/feedbackContext';
 export { FeedbackData } from './models/feedbackData';
 export { FeedbackMetaData } from './models/feedbackMetaData';
+export { FeedbackReq } from './models/feedbackReq';
 export { FeedbackResponse } from './models/feedbackResponse';
 export { Pagination } from './models/pagination';
-export { Tenant } from './models/tenant';
 export { XORDERBYEnum } from './models/xORDERBYEnum';
 export { XORDEREnum } from './models/xORDEREnum';

@@ -14,31 +14,16 @@ export interface FeedbackMetaData {
   createdAt: string;
   /** Date of the feedback update. */
   updatedAt?: string;
-  /** Unique identifier of the user. */
-  userId?: string;
   /** IP address of the user. */
   userIP: string;
-  /** Unique identifier of the tenant. */
-  tenantId: string;
   /** User agent of the device. */
   userAgent: string;
-  /** Page of the feedback. */
-  page?: string;
-  /** Category of the feedback. */
-  category?: string;
-  /** operationId of the API. */
-  apiOperationId?: string;
 }
 
 export const feedbackMetaDataSchema: Schema<FeedbackMetaData> = object({
   id: ['id', string()],
   createdAt: ['createdAt', string()],
   updatedAt: ['updatedAt', optional(string())],
-  userId: ['userId', optional(string())],
   userIP: ['userIP', string()],
-  tenantId: ['tenantId', string()],
   userAgent: ['userAgent', string()],
-  page: ['page', optional(string())],
-  category: ['category', optional(string())],
-  apiOperationId: ['apiOperationId', optional(string())],
 });
