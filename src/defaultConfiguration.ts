@@ -12,7 +12,6 @@ export const DEFAULT_CONFIGURATION: Configuration = {
   timeout: 0,
   environment: Environment.Production,
   xRapidAPIKey: 'TODO X-RapidAPI-Key',
-  xAPIKEY: 'TODO X-API-KEY',
   xRapidAPIHost: 'TODO X-RapidAPI-Host',
 };
 
