@@ -11,7 +11,6 @@ export interface Configuration {
   timeout: number;
   environment: Environment;
   xRapidAPIKey: string;
-  xRapidAPIHost: string;
   httpClientOptions?: Partial<HttpClientOptions>;
   unstable_httpClientOptions?: any;
 }

@@ -13,10 +13,8 @@ export const noneAuthenticationProvider = () => passThroughInterceptor;
 
 export const customHeaderAuthenticationProvider = ({
   xRapidAPIKey,
-  xRapidAPIHost,
 }: {
   xRapidAPIKey: string;
-  xRapidAPIHost: string;
 }): AuthenticatorInterface<boolean> => {
   return (requiresAuth?: boolean) => {
     if (!requiresAuth) {
@@ -26,7 +24,6 @@ export const customHeaderAuthenticationProvider = ({
     return (request, options, next) => {
       const customHeaderParams = {
         'X-RapidAPI-Key': xRapidAPIKey,
-        'X-RapidAPI-Host': xRapidAPIHost,
       };
       mergeHeaders(request.headers ?? {}, customHeaderParams);
 

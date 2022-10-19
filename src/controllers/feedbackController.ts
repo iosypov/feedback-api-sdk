@@ -113,8 +113,8 @@ export class FeedbackController extends BaseController {
     req.header('X-API-KEY', mapped.xAPIKEY);
     req.header('X-PAGE', mapped.xPAGE);
     req.header('X-PER-PAGE', mapped.xPERPAGE);
-    req.header('XORDER', mapped.xORDER);
-    req.header('XORDERBY', mapped.xORDERBY);
+    req.header('X-ORDER', mapped.xORDER);
+    req.header('X-ORDER-BY', mapped.xORDERBY);
     req.query('rating', mapped.rating);
     req.query('sentiment', mapped.sentiment);
     req.query('reasons', mapped.reasons);

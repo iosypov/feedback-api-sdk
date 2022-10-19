@@ -23,7 +23,6 @@ The following parameters are configurable for the API Client:
 | `httpClientOptions` | `Partial<HttpClientOptions>` | Stable configurable http client options. |
 | `unstableHttpClientOptions` | `any` | Unstable configurable http client options. |
 | `xRapidAPIKey` | `string` | Your Rapid API Key |
-| `xRapidAPIHost` | `string` | *Default*: `'feedback-api5.p.rapidapi.com'` |
 
 ### HttpClientOptions
 
@@ -52,7 +51,6 @@ The API client can be initialized as follows:
 const client = new Client({
   timeout: 0,
   xRapidAPIKey: 'X-RapidAPI-Key',
-  xRapidAPIHost: 'feedback-api5.p.rapidapi.com',
 })
 ```
 
@@ -69,4 +67,3 @@ This API uses `Custom Header Signature`.
 
 * [ApiResponse](doc/api-response.md)
 * [ApiError](doc/api-error.md)
-
